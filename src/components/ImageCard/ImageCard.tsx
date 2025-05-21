@@ -1,6 +1,10 @@
 import css from './ImageCard.module.css';
 
-const ImageCard = ({
+type ImageCardProps = {
+  imageItem: ImageItem;
+};
+
+const ImageCard: React.FC<ImageCardProps> = ({
   imageItem: {
     alt_description,
     likes,

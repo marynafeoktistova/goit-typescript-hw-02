@@ -5,11 +5,33 @@ import { disableBodyScroll, enableBodyScroll } from 'body-scroll-lock';
 import css from './ImageModal.module.css';
 import { useEffect } from 'react';
 
-const formatDate = dateString => {
+type ImageModal = {
+  isOpen: boolean;
+  onCloseModal: () => void;
+  image: {
+    alt_description?: string | null;
+    urls?: {
+      regular?: string;
+    };
+    user: {
+      name: string;
+      social?: {
+        portfolio_url?: string;
+      };
+      location?: string;
+    };
+    likes: number;
+    description?: string;
+    tags?: { title: string }[];
+    created_at: string;
+  } | null;
+};
+
+const formatDate = (dateString: string): string => {
   return format(new Date(dateString), 'MMMM dd yyyy');
 };
 
-const ImageModal = ({ isOpen, onCloseModal, image }) => {
+const ImageModal: React.FC<ImageModal> = ({ isOpen, onCloseModal, image }) => {
   useEffect(() => {
     if (isOpen) {
       disableBodyScroll(document.body);
@@ -26,12 +48,12 @@ const ImageModal = ({ isOpen, onCloseModal, image }) => {
       {image && (
         <div className={css.containerModal}>
           <div className={css.imgContainer}>
-            {image.urls && image.urls.regular && <img className={css.image} src={image.urls.regular} alt={image.alt_description || 'Image'} />}
+            {image.urls?.regular && <img className={css.image} src={image.urls.regular} alt={image.alt_description || 'Image'} />}
           </div>
           <div className={css.moreInform}>
             <p className={css.author}>
               Author:{' '}
-              {image.user && image.user.social && image.user.social.portfolio_url ? (
+              {image.user.social?.portfolio_url ? (
                 <a className={css.linkAuthor} href={image.user.social.portfolio_url} target='_blank' rel='noopener noreferrer'>
                   {image.user.name}
                 </a>

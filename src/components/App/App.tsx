@@ -1,4 +1,3 @@
-import { getImagesUnplash } from '../../images-api';
 import { useEffect, useState } from 'react';
 import Modal from 'react-modal';
 import toast, { Toaster } from 'react-hot-toast';
@@ -7,26 +6,28 @@ import ImageGallery from '../ImageGallery/ImageGallery';
 import LoadMoreBtn from '../LoadMoreBtn/LoadMoreBtn';
 import ErrorMessage from '../ErrorMessage/ErrorMessage';
 import ImageModal from '../ImageModal/ImageModal';
-import css from './App.module.css';
 import Loader from '../Loader/Loader';
+import { getImagesUnplash } from '../../images-api';
+import { ImageType } from './App.types';
+import css from './App.module.css';
 
 function App() {
-  const [images, setImages] = useState([]);
-  const [page, setPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
-  const [search, setSearch] = useState('');
-  const [error, setError] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [loadingMore, setLoadingMore] = useState(false);
-  const [isSearching, setIsSearching] = useState(false);
-  const [selectedImage, setSelectedImage] = useState(null);
-  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [images, setImages] = useState<ImageType[]>([]);
+  const [page, setPage] = useState<number>(1);
+  const [totalPages, setTotalPages] = useState<number>(1);
+  const [search, setSearch] = useState<string>('');
+  const [error, setError] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [loadingMore, setLoadingMore] = useState<boolean>(false);
+  const [isSearching, setIsSearching] = useState<boolean>(false);
+  const [selectedImage, setSelectedImage] = useState<ImageType | null>(null);
+  const [modalIsOpen, setModalIsOpen] = useState<boolean>(false);
 
   useEffect(() => {
     Modal.setAppElement('#root');
   }, []);
 
-  const handleSearch = async searchQuery => {
+  const handleSearch = async (searchQuery: string): Promise<void> => {
     try {
       setLoading(true);
       setIsSearching(true);
@@ -36,9 +37,7 @@ function App() {
 
       const dataImg = await getImagesUnplash(searchQuery, 1);
       if (!dataImg.total) {
-        toast('Sorry, we have not found the photos for your request.', {
-          duration: 5000,
-        });
+        toast('Sorry, we have not found the photos for your request.', { duration: 5000 });
         setError(true);
       } else {
         toast.success(`Wow! We found ${dataImg.total} pictures`);
@@ -55,14 +54,12 @@ function App() {
     }
   };
 
-  const handleLoadMore = async () => {
+  const handleLoadMore = async (): Promise<void> => {
     try {
       setLoadingMore(true);
       const nextPage = page + 1;
       const dataImages = await getImagesUnplash(search, nextPage);
-      setImages(prevImages => {
-        return [...prevImages, ...dataImages.results];
-      });
+      setImages(prevImages => [...prevImages, ...dataImages.results]);
       setPage(nextPage);
     } catch {
       setError(true);
@@ -71,15 +68,16 @@ function App() {
     }
   };
 
-  const isVisible = () => {
+  const isVisible = (): boolean => {
     return totalPages !== 0 && totalPages !== page && !loadingMore;
   };
 
-  const openModal = image => {
+  const openModal = (image: ImageType): void => {
     setSelectedImage(image);
     setModalIsOpen(true);
   };
-  const closeModal = () => setModalIsOpen(false);
+
+  const closeModal = (): void => setModalIsOpen(false);
 
   return (
     <>
