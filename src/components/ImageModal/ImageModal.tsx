@@ -4,34 +4,19 @@ import { format } from 'date-fns';
 import { disableBodyScroll, enableBodyScroll } from 'body-scroll-lock';
 import css from './ImageModal.module.css';
 import { useEffect } from 'react';
+import { ImageType } from '../App/App.types';
 
-type ImageModal = {
+interface Props {
   isOpen: boolean;
   onCloseModal: () => void;
-  image: {
-    alt_description?: string | null;
-    urls?: {
-      regular?: string;
-    };
-    user: {
-      name: string;
-      social?: {
-        portfolio_url?: string;
-      };
-      location?: string;
-    };
-    likes: number;
-    description?: string;
-    tags?: { title: string }[];
-    created_at: string;
-  } | null;
-};
+  image: ImageType | null;
+}
 
 const formatDate = (dateString: string): string => {
   return format(new Date(dateString), 'MMMM dd yyyy');
 };
 
-const ImageModal: React.FC<ImageModal> = ({ isOpen, onCloseModal, image }) => {
+const ImageModal: React.FC<Props> = ({ isOpen, onCloseModal, image }) => {
   useEffect(() => {
     if (isOpen) {
       disableBodyScroll(document.body);

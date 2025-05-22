@@ -7,7 +7,7 @@ import LoadMoreBtn from '../LoadMoreBtn/LoadMoreBtn';
 import ErrorMessage from '../ErrorMessage/ErrorMessage';
 import ImageModal from '../ImageModal/ImageModal';
 import Loader from '../Loader/Loader';
-import { getImagesUnplash } from '../../images-api';
+import { getImagesUnsplash } from '../../images-api';
 import { ImageType } from './App.types';
 import css from './App.module.css';
 
@@ -35,7 +35,7 @@ function App() {
       setPage(1);
       setSearch(searchQuery);
 
-      const dataImg = await getImagesUnplash(searchQuery, 1);
+      const dataImg = await getImagesUnsplash(searchQuery, 1);
       if (!dataImg.total) {
         toast('Sorry, we have not found the photos for your request.', { duration: 5000 });
         setError(true);
@@ -58,7 +58,7 @@ function App() {
     try {
       setLoadingMore(true);
       const nextPage = page + 1;
-      const dataImages = await getImagesUnplash(search, nextPage);
+      const dataImages = await getImagesUnsplash(search, nextPage);
       setImages(prevImages => [...prevImages, ...dataImages.results]);
       setPage(nextPage);
     } catch {

@@ -1,27 +1,13 @@
 import ImageCard from '../ImageCard/ImageCard';
 import css from './ImageGallery.module.css';
+import { ImageType } from '../App/App.types';
 
-type ImageItem = {
-  id: string;
-  alt_description: string;
-  likes: number;
-  urls: {
-    small: string;
-  };
-  user: {
-    name: string;
-    social: {
-      portfolio_url: string;
-    };
-  };
-};
+interface Props {
+  imageList: ImageType[];
+  openModal: (image: ImageType) => void;
+}
 
-type ImageGalleryProps = {
-  imageList: ImageItem[];
-  openModal: (image: ImageItem) => void;
-};
-
-const ImageGallery: React.FC<ImageGalleryProps> = ({ imageList, openModal }) => {
+const ImageGallery: React.FC<Props> = ({ imageList, openModal }) => {
   const imageClick = (event: React.MouseEvent<HTMLUListElement>) => {
     const imgItem = (event.target as HTMLElement).closest('li');
     if (imgItem) {

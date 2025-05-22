@@ -1,11 +1,12 @@
 import css from './ImageCard.module.css';
+import { ImageType } from '../App/App.types';
 
-type ImageCardProps = {
-  imageItem: ImageItem;
-};
+interface Props {
+  imageItem: ImageType;
+}
 
-const ImageCard: React.FC<ImageCardProps> = ({
-  imageItem: {
+const ImageCard: React.FC<Props> = ({ imageItem }) => {
+  const {
     alt_description,
     likes,
     urls: { small },
@@ -13,11 +14,11 @@ const ImageCard: React.FC<ImageCardProps> = ({
       name,
       social: { portfolio_url },
     },
-  },
-}) => {
+  } = imageItem;
+
   return (
     <div className={css.galleryThumb}>
-      <img className={css.galleryImage} src={small} alt={alt_description} width='360' />
+      <img className={css.galleryImage} src={small} alt={alt_description || 'Image'} width='360' />
       <div className={css.thumbBlock}>
         <p className={css.textPhoto}>
           ✍️ <strong>Author</strong>
